@@ -22,13 +22,20 @@ class CustomerService(val customerRepository: CustomerRepositoryPort?): Customer
             customersList.add(CustomerDTO(id, name))
         }
 
-        customerRepository?.saveAll(customersList)
+        customerRepository!!.saveAll(customersList)
         val response = BulkInsertCustomerResponseDTO(insertCustomers.fileName, customersListResponse)
         return response
     }
 
+    override fun findById(id: Long): CustomerDTO {
+        return customerRepository!!.findById(id)
+    }
+
     override fun save(customer: CustomerDTO): CustomerDTO {
         return customerRepository!!.save(customer)
+    }
+    override fun delete(customer: CustomerDTO) {
+        customerRepository!!.delete(customer)
     }
 
     override fun getCustomersCount(): Int? {

@@ -18,4 +18,19 @@ class CustomerRepository(private val customerRepositorySpringBoot: CustomerRepos
 
         customerRepositorySpringBoot.saveAll(customersList)
     }
+
+    override fun save(customer: CustomerDTO):CustomerDTO {
+        val customerEntity = customerRepositorySpringBoot.save(CustomerEntity( customer.id, customer.name))
+        val result = CustomerDTO(customerEntity.id, customerEntity.name)
+        return result
+    }
+
+    override fun delete(customer: CustomerDTO) {
+        customerRepositorySpringBoot.delete()
+    }
+
+    override fun getCustomersCount(): Int? {
+        val list = customerRepositorySpringBoot.findAll()
+        return list.size
+    }
 }

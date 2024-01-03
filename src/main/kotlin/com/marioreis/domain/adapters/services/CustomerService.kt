@@ -1,19 +1,19 @@
 package com.marioreis.domain.adapters.services
 
 import com.marioreis.domain.dto.CustomerDTO
-import com.marioreis.domain.dto.InsertCostumerRequestDTO
-import com.marioreis.domain.dto.InsertCustomerResponseDTO
-import com.marioreis.domain.dto.InsertCustomerResponseDetailDTO
+import com.marioreis.domain.dto.BulkInsertCostumerRequestDTO
+import com.marioreis.domain.dto.BulkInsertCustomerResponseDTO
+import com.marioreis.domain.dto.BulkInsertCustomerResponseDetailDTO
 import com.marioreis.domain.ports.interfaces.CustomerServicePort
 import com.marioreis.domain.ports.repositories.CustomerRepositoryPort
 import org.springframework.stereotype.Service
 
 @Service
 class CustomerService(val customerRepository: CustomerRepositoryPort?): CustomerServicePort {
-    override fun insertCustomers(insertCustomers: InsertCostumerRequestDTO): InsertCustomerResponseDTO {
+    override fun bulkInsertCustomers(insertCustomers: BulkInsertCostumerRequestDTO): BulkInsertCustomerResponseDTO {
 
         val customersList = ArrayList<CustomerDTO>()
-        val customersListResponse = ArrayList<InsertCustomerResponseDetailDTO>()
+        val customersListResponse = ArrayList<BulkInsertCustomerResponseDetailDTO>()
 
         insertCustomers.customers.forEach {
             val fields = it.split(";")
@@ -23,7 +23,15 @@ class CustomerService(val customerRepository: CustomerRepositoryPort?): Customer
         }
 
         customerRepository?.saveAll(customersList)
-        val response = InsertCustomerResponseDTO(insertCustomers.fileName, customersListResponse)
+        val response = BulkInsertCustomerResponseDTO(insertCustomers.fileName, customersListResponse)
         return response
+    }
+
+    override fun save(customer: CustomerDTO): CustomerDTO {
+        return customerRepository!!.save(customer)
+    }
+
+    override fun getCustomersCount(): Int? {
+        return customerRepository!!.getCustomersCount()
     }
 }

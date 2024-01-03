@@ -1,6 +1,6 @@
 package com.marioreis.domain.dto
 
-data class InsertCustomerResponseDetailDTO (
+data class BulkInsertCustomerResponseDetailDTO (
     val lineNumber: Integer,
     val lineContent: String,
     val validationErrors: List<String>

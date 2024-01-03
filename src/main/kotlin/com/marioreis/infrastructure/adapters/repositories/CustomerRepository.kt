@@ -31,16 +31,14 @@ class CustomerRepository(private val customerRepositorySpringBoot: CustomerRepos
 
     override fun save(customer: CustomerDTO):CustomerDTO {
         val customerEntity = customerRepositorySpringBoot.save(CustomerEntity( customer.id, customer.name))
-        val result = CustomerDTO(customerEntity.id, customerEntity.name)
-        return result
+        return CustomerDTO(customerEntity.id, customerEntity.name)
     }
 
     override fun delete(customer: CustomerDTO) {
         val customerEntity = customerRepositorySpringBoot.save(CustomerEntity( customer.id, customer.name))
         customerRepositorySpringBoot.delete(customerEntity)
     }
+    override fun deleteAll() = customerRepositorySpringBoot.deleteAll()
+    override fun getCustomersCount(): Int? = customerRepositorySpringBoot.findAll().size
 
-    override fun getCustomersCount(): Int? {
-        return customerRepositorySpringBoot.findAll().size
-    }
 }

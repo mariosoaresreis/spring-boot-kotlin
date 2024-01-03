@@ -21,6 +21,7 @@ class CustomerControllerIntgTest {
 
     @Autowired
     lateinit var webTestClient: WebTestClient
+
     @BeforeEach
     fun setUp() {
         customerRepository.deleteAll()
@@ -29,7 +30,7 @@ class CustomerControllerIntgTest {
     }
 
     @Test
-    fun addCustomer() {
+    fun saveCustomer() {
         val customer = customerRepository.findById( CustomerMock.CUSTOMER_ID)
 
         val savedCustomerDTO = webTestClient
@@ -44,6 +45,63 @@ class CustomerControllerIntgTest {
 
         Assertions.assertTrue {
             savedCustomerDTO!!.id != null
+        }
+    }
+
+    @Test
+    fun customersCount() {
+        val result = webTestClient
+            .get()
+            .uri("/v1/customers/count")
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(Long::class.java)
+            .returnResult()
+            .responseBody
+
+        Assertions.assertTrue {
+            result == 1L
+        }
+    }
+
+    @Test
+    fun findById() {
+        val result = webTestClient
+            .get()
+            .uri("/v1/customers/${CustomerMock.CUSTOMER_ID}")
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(CustomerDTO::class.java)
+            .returnResult()
+            .responseBody
+
+        Assertions.assertTrue {
+            result!!.id != null
+        }
+    }
+
+    @Test
+    fun deleteCustomer() {
+        webTestClient
+            .delete()
+            .uri("/v1/customers/${CustomerMock.CUSTOMER_ID}")
+            .exchange()
+            .expectStatus().isNoContent
+            .expectBody(CustomerDTO::class.java)
+            .returnResult()
+            .responseBody
+
+        val result = webTestClient
+            .get()
+            .uri("/v1/customers/count")
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(Long::class.java)
+            .returnResult()
+            .responseBody
+
+        Assertions.assertTrue {
+            result == 0L
         }
     }
 }

@@ -31,6 +31,13 @@ class CustomerController(val customerService: CustomerServicePort) {
         return customerService.findById(id)
     }
 
+    @DeleteMapping("/customers/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteCustomer(@PathVariable @Valid id: Long ) {
+        val customer = customerService.findById(id)
+        customerService.delete(customer)
+    }
+
     @GetMapping("/customers/count")
     @ResponseStatus(HttpStatus.OK)
     fun getCustomersCount(): Int? {

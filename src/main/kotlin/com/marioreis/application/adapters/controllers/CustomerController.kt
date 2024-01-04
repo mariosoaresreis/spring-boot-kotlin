@@ -18,18 +18,13 @@ class CustomerController(val customerService: CustomerServicePort) {
     fun bulkInsertCustomers(@RequestBody @Valid insertCostumerRequest: BulkInsertCostumerRequestDTO ): BulkInsertCustomerResponseDTO {
         return customerService.bulkInsertCustomers(insertCostumerRequest)
     }
-
     @PostMapping("/customers")
     @ResponseStatus(HttpStatus.OK)
-    fun saveCustomer(@RequestBody @Valid customer: CustomerDTO ): CustomerDTO {
-        return customerService.save(customer)
-    }
+    fun saveCustomer(@RequestBody @Valid customer: CustomerDTO ) = customerService.save(customer)
 
     @GetMapping("/customers/{id}")
     @ResponseStatus(HttpStatus.OK)
-    fun getCustomer(@PathVariable @Valid id: Long ): CustomerDTO {
-        return customerService.findById(id)
-    }
+    fun getCustomer(@PathVariable @Valid id: Long ) = customerService.findById(id)
 
     @DeleteMapping("/customers/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -40,8 +35,5 @@ class CustomerController(val customerService: CustomerServicePort) {
 
     @GetMapping("/customers/count")
     @ResponseStatus(HttpStatus.OK)
-    fun getCustomersCount(): Int? {
-        return customerService.getCustomersCount()
-    }
-
+    fun getCustomersCount(): Int? = customerService.getCustomersCount()
 }
